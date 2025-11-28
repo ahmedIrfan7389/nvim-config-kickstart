@@ -206,6 +206,12 @@ end, { desc = 'Format file' })
 -- vim.keymap.set("n", "<C-S-l>", "<C-w>L", { desc = "Move window to the right" })
 -- vim.keymap.set("n", "<C-S-j>", "<C-w>J", { desc = "Move window to the lower" })
 -- vim.keymap.set("n", "<C-S-k>", "<C-w>K", { desc = "Move window to the upper" })
+--
+-- Set tab width to 4 spaces
+vim.opt.tabstop = 2      -- How wide a tab character looks
+vim.opt.shiftwidth = 2   -- Size of an indent
+vim.opt.expandtab = true -- Convert tabs to spaces (Standard for Python/Lua)
+vim.opt.softtabstop = 2  -- Makes backspace delete 4 spaces at once
 
 -- FAST ESCAPE
 -- ==========================================
@@ -338,7 +344,7 @@ require('lazy').setup({
   -- Then, because we use the `opts` key (recommended), the configuration runs
   -- after the plugin has been loaded as `require(MODULE).setup(opts)`.
 
-  { -- Useful plugin to show you pending keybinds.
+  {                     -- Useful plugin to show you pending keybinds.
     'folke/which-key.nvim',
     event = 'VimEnter', -- Sets the loading event to 'VimEnter'
     opts = {
@@ -419,7 +425,7 @@ require('lazy').setup({
       { 'nvim-telescope/telescope-ui-select.nvim' },
 
       -- Useful for getting pretty icons, but requires a Nerd Font.
-      { 'nvim-tree/nvim-web-devicons', enabled = vim.g.have_nerd_font },
+      { 'nvim-tree/nvim-web-devicons',            enabled = vim.g.have_nerd_font },
     },
     config = function()
       -- Telescope is a fuzzy finder that comes with a lot of different things that
@@ -527,7 +533,7 @@ require('lazy').setup({
       'WhoIsSethDaniel/mason-tool-installer.nvim',
 
       -- Useful status updates for LSP.
-      { 'j-hui/fidget.nvim', opts = {} },
+      { 'j-hui/fidget.nvim',    opts = {} },
 
       -- Allows extra capabilities provided by blink.cmp
       'saghen/blink.cmp',
@@ -714,8 +720,8 @@ require('lazy').setup({
         clangd = {
           cmd = {
             'clangd',
-            '--background-index', -- Index project in background (makes search instant)
-            '--clang-tidy', -- Enable built-in linting
+            '--background-index',      -- Index project in background (makes search instant)
+            '--clang-tidy',            -- Enable built-in linting
             '--header-insertion=iwyu', -- Auto-import headers (Include What You Use)
             '--completion-style=detailed',
             '--function-arg-placeholders',
@@ -727,9 +733,9 @@ require('lazy').setup({
             clangdFileStatus = true,
           },
           -- OPTIONAL: Add this if you get "multiple offset encodings" error
-          -- capabilities = {
-          --   offsetEncoding = { "utf-16" },
-          -- },
+          capabilities = {
+            offsetEncoding = { 'utf-16' },
+          },
         },
         -- gopls = {},
         -- pyright = {},
@@ -870,6 +876,8 @@ require('lazy').setup({
         --
         -- See :h blink-cmp-config-keymap for defining your own keymap
         preset = 'enter',
+        ['<Tab>'] = {},
+        ['<S-Tab>'] = {},
 
         -- For more advanced Luasnip keymaps (e.g. selecting choice nodes, expansion) see:
         --    https://github.com/L3MON4D3/LuaSnip?tab=readme-ov-file#keymaps
