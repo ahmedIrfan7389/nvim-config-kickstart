@@ -4,15 +4,15 @@ return {
   'Exafunction/codeium.vim',
   event = 'BufEnter',
   config = function()
-    -- Change '<C-g>' here to any keycode you like.
-    -- Note: The image used <C-space>, but that often conflicts with nvim-cmp/blink.
-    -- I recommend <C-g> (standard for Codeium) or keeping <C-space> if you disable it in cmp.
+    -- Disable Codeium's default Tab mapping so it doesn't mess with your indentation
+    vim.g.codeium_no_map_tab = 1
 
-    vim.keymap.set('i', '<C-space>', function()
-      -- vim.keymap.set('i', '<Tab>', function()
+    -- Use Ctrl + L to accept the suggestion
+    vim.keymap.set('i', '<C-l>', function()
       return vim.fn['codeium#Accept']()
     end, { expr = true, silent = true })
 
+    -- Cycle suggestions
     vim.keymap.set('i', '<c-;>', function()
       return vim.fn['codeium#CycleCompletions'](1)
     end, { expr = true, silent = true })
@@ -21,6 +21,7 @@ return {
       return vim.fn['codeium#CycleCompletions'](-1)
     end, { expr = true, silent = true })
 
+    -- Clear suggestion
     vim.keymap.set('i', '<c-x>', function()
       return vim.fn['codeium#Clear']()
     end, { expr = true, silent = true })

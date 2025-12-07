@@ -208,11 +208,13 @@ end, { desc = 'Format file' })
 -- vim.keymap.set("n", "<C-S-k>", "<C-w>K", { desc = "Move window to the upper" })
 --
 -- Set tab width to 4 spaces
-vim.opt.tabstop = 2      -- How wide a tab character looks
-vim.opt.shiftwidth = 2   -- Size of an indent
+vim.opt.tabstop = 2 -- How wide a tab character looks
+vim.opt.shiftwidth = 2 -- Size of an indent
 vim.opt.expandtab = true -- Convert tabs to spaces (Standard for Python/Lua)
-vim.opt.softtabstop = 2  -- Makes backspace delete 4 spaces at once
-
+vim.opt.softtabstop = 2 -- Makes backspace delete 4 spaces at once
+-- [[ Indentation Logic ]]
+vim.opt.autoindent = true -- Copy indent from current line when starting new one
+vim.opt.smartindent = true -- Smarter indentation for C-style languages
 -- FAST ESCAPE
 -- ==========================================
 -- Press 'jk' fast to exit insert mode
@@ -220,6 +222,24 @@ vim.opt.softtabstop = 2  -- Makes backspace delete 4 spaces at once
 
 -- Optional: 'jj' is also popular if you prefer that
 vim.keymap.set('i', 'jj', '<Esc>', { desc = 'Exit insert mode with jj' })
+-- ==========================================
+-- --- C++ Compile/Run Mappings (Lua Version) ---
+
+-- 1. Set the compiler command specifically for C++ files
+vim.api.nvim_create_autocmd('FileType', {
+  pattern = 'cpp',
+  callback = function()
+    -- Sets 'makeprg' for the current buffer.
+    -- '%' expands to the current filename.
+    vim.bo.makeprg = 'g++ % -o a.out'
+  end,
+})
+
+-- 2. Map F9 to compile and open the error window
+vim.keymap.set('n', '<F9>', '<cmd>make<CR><cmd>copen<CR>', { desc = 'Compile C++ code' })
+
+-- 3. Map F10 to run the executable
+vim.keymap.set('n', '<F10>', '<cmd>!./a.out<CR>', { desc = 'Run compiled C++ binary' })
 --
 -- [[ Basic Autocommands ]]
 --  See `:help lua-guide-autocommands`
@@ -344,7 +364,7 @@ require('lazy').setup({
   -- Then, because we use the `opts` key (recommended), the configuration runs
   -- after the plugin has been loaded as `require(MODULE).setup(opts)`.
 
-  {                     -- Useful plugin to show you pending keybinds.
+  { -- Useful plugin to show you pending keybinds.
     'folke/which-key.nvim',
     event = 'VimEnter', -- Sets the loading event to 'VimEnter'
     opts = {
@@ -425,7 +445,7 @@ require('lazy').setup({
       { 'nvim-telescope/telescope-ui-select.nvim' },
 
       -- Useful for getting pretty icons, but requires a Nerd Font.
-      { 'nvim-tree/nvim-web-devicons',            enabled = vim.g.have_nerd_font },
+      { 'nvim-tree/nvim-web-devicons', enabled = vim.g.have_nerd_font },
     },
     config = function()
       -- Telescope is a fuzzy finder that comes with a lot of different things that
@@ -533,7 +553,7 @@ require('lazy').setup({
       'WhoIsSethDaniel/mason-tool-installer.nvim',
 
       -- Useful status updates for LSP.
-      { 'j-hui/fidget.nvim',    opts = {} },
+      { 'j-hui/fidget.nvim', opts = {} },
 
       -- Allows extra capabilities provided by blink.cmp
       'saghen/blink.cmp',
@@ -720,8 +740,8 @@ require('lazy').setup({
         clangd = {
           cmd = {
             'clangd',
-            '--background-index',      -- Index project in background (makes search instant)
-            '--clang-tidy',            -- Enable built-in linting
+            '--background-index', -- Index project in background (makes search instant)
+            '--clang-tidy', -- Enable built-in linting
             '--header-insertion=iwyu', -- Auto-import headers (Include What You Use)
             '--completion-style=detailed',
             '--function-arg-placeholders',
