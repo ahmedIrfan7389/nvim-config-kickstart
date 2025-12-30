@@ -1,6 +1,6 @@
 -- install codeium
 -- https://github.com/Exafunction/codeium.vim
-return {
+-- return {
   'Exafunction/codeium.vim',
   event = 'BufEnter',
   config = function()
