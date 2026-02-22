@@ -991,8 +991,16 @@ require('lazy').setup({
   -- Kanagawa
   {
     'rebelot/kanagawa.nvim',
+    lazy = false,
     priority = 1000,
-    opts = { transparent = true }, --
+    opts = {
+      transparent = true,
+      theme = 'dragon', -- Tells the plugin to use the Dragon palette
+    },
+    config = function(_, opts)
+      require('kanagawa').setup(opts)
+      vim.cmd.colorscheme 'kanagawa-dragon' -- Activates the specific variant
+    end,
   },
 
   -- Cyberdream
@@ -1005,12 +1013,12 @@ require('lazy').setup({
   -- Gruvbox Material (Your Default)
   {
     'sainnhe/gruvbox-material',
-    lazy = false,
+    -- lazy = false,
     priority = 1000,
     config = function()
       vim.g.gruvbox_material_background = 'hard'
       vim.g.gruvbox_material_transparent_background = 1
-      vim.cmd.colorscheme 'gruvbox-material'
+      -- vim.cmd.colorscheme 'gruvbox-material'
     end,
   },
 
