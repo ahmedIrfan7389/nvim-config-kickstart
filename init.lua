@@ -211,12 +211,12 @@ end, { desc = 'Format file' })
 -- vim.keymap.set("n", "<C-S-k>", "<C-w>K", { desc = "Move window to the upper" })
 --
 -- Set tab width to 4 spaces
-vim.opt.tabstop = 2 -- How wide a tab character looks
-vim.opt.shiftwidth = 2 -- Size of an indent
-vim.opt.expandtab = true -- Convert tabs to spaces (Standard for Python/Lua)
-vim.opt.softtabstop = 2 -- Makes backspace delete 4 spaces at once
+vim.opt.tabstop = 2        -- How wide a tab character looks
+vim.opt.shiftwidth = 2     -- Size of an indent
+vim.opt.expandtab = true   -- Convert tabs to spaces (Standard for Python/Lua)
+vim.opt.softtabstop = 2    -- Makes backspace delete 4 spaces at once
 -- [[ Indentation Logic ]]
-vim.opt.autoindent = true -- Copy indent from current line when starting new one
+vim.opt.autoindent = true  -- Copy indent from current line when starting new one
 vim.opt.smartindent = true -- Smarter indentation for C-style languages
 -- FAST ESCAPE
 -- ==========================================
@@ -375,7 +375,7 @@ require('lazy').setup({
     },
   },
 
-  { -- Useful plugin to show you pending keybinds.
+  {                     -- Useful plugin to show you pending keybinds.
     'folke/which-key.nvim',
     event = 'VimEnter', -- Sets the loading event to 'VimEnter'
     opts = {
@@ -456,7 +456,7 @@ require('lazy').setup({
       { 'nvim-telescope/telescope-ui-select.nvim' },
 
       -- Useful for getting pretty icons, but requires a Nerd Font.
-      { 'nvim-tree/nvim-web-devicons', enabled = vim.g.have_nerd_font },
+      { 'nvim-tree/nvim-web-devicons',            enabled = vim.g.have_nerd_font },
     },
     config = function()
       -- Telescope is a fuzzy finder that comes with a lot of different things that
@@ -564,7 +564,7 @@ require('lazy').setup({
       'WhoIsSethDaniel/mason-tool-installer.nvim',
 
       -- Useful status updates for LSP.
-      { 'j-hui/fidget.nvim', opts = {} },
+      { 'j-hui/fidget.nvim',    opts = {} },
 
       -- Allows extra capabilities provided by blink.cmp
       'saghen/blink.cmp',
@@ -751,8 +751,8 @@ require('lazy').setup({
         clangd = {
           cmd = {
             'clangd',
-            '--background-index', -- Index project in background (makes search instant)
-            '--clang-tidy', -- Enable built-in linting
+            '--background-index',      -- Index project in background (makes search instant)
+            '--clang-tidy',            -- Enable built-in linting
             '--header-insertion=iwyu', -- Auto-import headers (Include What You Use)
             '--completion-style=detailed',
             '--function-arg-placeholders',
@@ -980,12 +980,19 @@ require('lazy').setup({
     opts = { transparent_background = true },
   },
 
-  -- Rose Pine
+  -- Rose Pine /rose
   {
     'rose-pine/neovim',
     name = 'rose-pine',
     priority = 1000,
-    opts = { styles = { transparency = true } }, --
+    opts = {
+      variant = 'moon',
+      styles = { transparency = true },
+    },
+    config = function(_, opts)
+      require('rose-pine').setup(opts)
+      vim.cmd.colorscheme 'rose-pine-moon'
+    end,
   },
 
   -- Kanagawa
@@ -999,7 +1006,7 @@ require('lazy').setup({
     },
     config = function(_, opts)
       require('kanagawa').setup(opts)
-      vim.cmd.colorscheme 'kanagawa-dragon' -- Activates the specific variant
+      -- vim.cmd.colorscheme 'kanagawa-dragon' -- Activates the specific variant
     end,
   },
 
