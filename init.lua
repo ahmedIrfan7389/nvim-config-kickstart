@@ -960,55 +960,172 @@ require('lazy').setup({
     'catppuccin/nvim',
     name = 'catppuccin',
     priority = 1000,
-    opts = { transparent_background = true },
+    opts = {
+      transparent_background = true,
+      integrations = {
+        telescope = { enabled = true, style = 'nvchad' },
+        treesitter = true,
+        notify = true,
+        mini = { enabled = true, transparent = true },
+      },
+    },
   },
 
-  -- Rose Pine /rose
+  -- Rose Pine
   {
     'rose-pine/neovim',
     name = 'rose-pine',
     priority = 1000,
     opts = {
       variant = 'moon',
-      styles = { transparency = true },
+      styles = { transparency = true }, -- Correct flag for Rose Pine
     },
     config = function(_, opts)
       require('rose-pine').setup(opts)
-      vim.cmd.colorscheme 'rose-pine-moon'
     end,
   },
 
   -- Kanagawa
   {
     'rebelot/kanagawa.nvim',
-    lazy = false,
     priority = 1000,
     opts = {
       transparent = true,
-      theme = 'dragon', -- Tells the plugin to use the Dragon palette
+      theme = 'dragon',
+      colors = {
+        theme = {
+          all = {
+            ui = { bg_gutter = 'none' }, -- Removes line number column bg
+          },
+        },
+      },
     },
-    config = function(_, opts)
-      require('kanagawa').setup(opts)
-      -- vim.cmd.colorscheme 'kanagawa-dragon' -- Activates the specific variant
-    end,
   },
 
   -- Cyberdream
   {
     'scottmckendry/cyberdream.nvim',
     priority = 1000,
-    opts = { transparent = true },
+    opts = {
+      transparent = true,
+      italic_comments = true,
+    },
   },
 
-  -- Gruvbox Material (Your Default)
+  -- Tokyo Night (Blossom Override)
+  {
+    'folke/tokyonight.nvim',
+    priority = 1000,
+    opts = {
+      style = 'night',
+      transparent = true,
+      styles = {
+        sidebars = 'transparent',
+        floats = 'transparent',
+      },
+      on_colors = function(colors)
+        -- Make the pinks/magentas match your wallpaper blossoms
+        colors.magenta = '#ff007c'
+        colors.magenta2 = '#f7768e'
+        colors.cyan = '#7dcfff' -- Match the sky blue in the clouds
+      end,
+    },
+    config = function(_, opts)
+      require('tokyonight').setup(opts)
+      -- vim.cmd 'colorscheme tokyonight-night'
+    end,
+  },
+  -- Nightfox (Includes carbonfox)
+  {
+    'EdenEast/nightfox.nvim',
+    priority = 1000,
+    opts = {
+      options = {
+        transparent = true, -- Nightfox uses the 'options' sub-table
+      },
+    },
+  },
+
+  -- Oxocarbon: Secondary (Manual Switch Only)
+  {
+    'nyoom-engineering/oxocarbon.nvim',
+    lazy = true,    -- IMPORTANT: Change this to true
+    priority = 100, -- Lower priority than Nord
+    config = function()
+      vim.opt.background = 'dark'
+      vim.cmd 'colorscheme oxocarbon'
+
+      local hl = vim.api.nvim_set_hl
+
+      -- --- INTERFACE ---
+      hl(0, 'Normal', { bg = 'none' })
+      hl(0, 'NormalFloat', { bg = 'none' })
+      hl(0, 'NeoTreeNormal', { bg = 'none' })
+      hl(0, 'SignColumn', { bg = 'none' })
+
+      -- --- AESTHETIC MAPPING ---
+      hl(0, 'Comment', { fg = '#c0caf5', italic = true })
+      hl(0, '@keyword', { fg = '#ff4f58', bold = true })
+      hl(0, '@function', { fg = '#ff7eb6' })
+      hl(0, '@variable', { fg = '#3ddbd9' })
+      hl(0, '@string', { fg = '#be95ff' })
+      hl(0, '@number', { fg = '#4fdc6f' })
+    end,
+  },
+  -- Everforest
+  {
+    'sainnhe/everforest',
+    priority = 1000,
+    config = function()
+      vim.g.everforest_background = 'hard'
+      vim.g.everforest_transparent_background = 1 -- 1 = On
+      -- vim.cmd.colorscheme 'everforest'
+    end,
+  },
+
+  -- Gruvbox Material (Matches your HyDE theme!)
   {
     'sainnhe/gruvbox-material',
-    -- lazy = false,
     priority = 1000,
     config = function()
       vim.g.gruvbox_material_background = 'hard'
-      vim.g.gruvbox_material_transparent_background = 1
+      vim.g.gruvbox_material_transparent_background = 1 -- 1 = On
       -- vim.cmd.colorscheme 'gruvbox-material'
+    end,
+  },
+
+  -- Nord: THE DEFAULT THEME
+  {
+    'shaunsingh/nord.nvim',
+    lazy = false,    -- Set to false so it loads on startup
+    priority = 1000, -- Set to 1000 so it loads before everything else
+    config = function()
+      vim.g.nord_disable_background = true
+      vim.g.nord_italic = true
+      require('nord').set()
+
+      local hl = vim.api.nvim_set_hl
+
+      -- --- 1. INTERFACE ---
+      hl(0, 'Normal', { bg = 'none' })
+      hl(0, 'NormalFloat', { bg = 'none' })
+      hl(0, 'NeoTreeNormal', { bg = 'none' })
+      hl(0, 'NeoTreeNormalNC', { bg = 'none' })
+
+      -- --- 2. THE AESTHETIC SPECTRUM (Matching your vibe) ---
+      hl(0, 'Comment', { fg = '#abb2bf', italic = true }) -- Silver
+      hl(0, '@keyword', { fg = '#bf616a', bold = true })  -- Samurai Red
+      hl(0, '@function', { fg = '#ff7eb6' })              -- Blossom Pink
+      hl(0, '@variable', { fg = '#3ddbd9' })              -- Electric Teal
+      hl(0, '@string', { fg = '#b48ead' })                -- IBM Purple
+      hl(0, '@number', { fg = '#4fdc6f' })                -- Emerald Green
+
+      -- --- 3. LINE NUMBERS ---
+      hl(0, 'LineNr', { fg = '#4c566a' })
+      hl(0, 'CursorLineNr', { fg = '#3ddbd9', bold = true })
+
+      -- Force the colorscheme call here just to be certain
+      vim.cmd 'colorscheme nord'
     end,
   },
 
@@ -1126,6 +1243,30 @@ require('lazy').setup({
     },
   },
 })
+-- Global Transparency Force (Put at the end of init.lua)
+vim.api.nvim_create_autocmd('ColorScheme', {
+  pattern = '*',
+  callback = function()
+    local hl_groups = {
+      'Normal',
+      'NormalFloat',
+      'NormalNC',
+      'LineNr',
+      'SignColumn',
+      'StatusLine',
+      'StatusLineNC',
+      'EndOfBuffer',
+      'MsgArea',
+      'TelescopeBorder',
+      'NvimTreeNormal',
+    }
+    for _, group in ipairs(hl_groups) do
+      vim.api.nvim_set_hl(0, group, { bg = 'none', ctermbg = 'none' })
+    end
+  end,
+})
+-- Append a space character to the end of buffer fillchars
+vim.opt.fillchars:append { eob = ' ' }
 
 -- The line beneath this is called `modeline`. See `:help modeline`
 -- vim: ts=2 sts=2 sw=2 et
