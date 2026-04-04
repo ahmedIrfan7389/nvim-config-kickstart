@@ -1125,7 +1125,7 @@ require('lazy').setup({
       hl(0, 'CursorLineNr', { fg = '#3ddbd9', bold = true })
 
       -- Force the colorscheme call here just to be certain
-      vim.cmd 'colorscheme nord'
+      -- vim.cmd 'colorscheme nord'
     end,
   },
 
@@ -1243,10 +1243,21 @@ require('lazy').setup({
     },
   },
 })
--- Global Transparency Force (Put at the end of init.lua)
+-- Global Transparency Force and Theme Persistence (Put at the end of init.lua)
 vim.api.nvim_create_autocmd('ColorScheme', {
   pattern = '*',
-  callback = function()
+  callback = function(args)
+    -- Save the selected colorscheme to a file so it persists on restart
+    local theme = args.match
+    if theme and theme ~= "" then
+      local persist_file = vim.fn.stdpath('data') .. '/last_theme.txt'
+      local f = io.open(persist_file, 'w')
+      if f then
+        f:write(theme)
+        f:close()
+      end
+    end
+
     local hl_groups = {
       'Normal',
       'NormalFloat',
@@ -1267,6 +1278,22 @@ vim.api.nvim_create_autocmd('ColorScheme', {
 })
 -- Append a space character to the end of buffer fillchars
 vim.opt.fillchars:append { eob = ' ' }
+
+-- Restore previous colorscheme if it exists
+local persist_file = vim.fn.stdpath('data') .. '/last_theme.txt'
+local f = io.open(persist_file, 'r')
+if f then
+  local saved_theme = f:read('*a')
+  f:close()
+  if saved_theme and saved_theme ~= '' then
+    saved_theme = saved_theme:gsub('%s+', '')
+    if saved_theme ~= '' then
+      vim.schedule(function()
+        pcall(vim.cmd.colorscheme, saved_theme)
+      end)
+    end
+  end
+end
 
 -- The line beneath this is called `modeline`. See `:help modeline`
 -- vim: ts=2 sts=2 sw=2 et
