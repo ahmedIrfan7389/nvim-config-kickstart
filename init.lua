@@ -856,7 +856,8 @@ require('lazy').setup({
           {
             'rafamadriz/friendly-snippets',
             config = function()
-              require('luasnip.loaders.from_vscode').lazy_load()
+              -- Do not load global snippets (removes copyright, license, etc.)
+              require('luasnip.loaders.from_vscode').lazy_load({ exclude = { "global" } })
             end,
           },
         },
