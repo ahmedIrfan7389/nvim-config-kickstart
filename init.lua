@@ -857,7 +857,7 @@ require('lazy').setup({
             'rafamadriz/friendly-snippets',
             config = function()
               -- Do not load global snippets (removes copyright, license, etc.)
-              require('luasnip.loaders.from_vscode').lazy_load({ exclude = { "global" } })
+              require('luasnip.loaders.from_vscode').lazy_load { exclude = { 'global' } }
             end,
           },
         },
@@ -1250,8 +1250,8 @@ vim.api.nvim_create_autocmd('ColorScheme', {
   callback = function(args)
     -- Save the selected colorscheme to a file so it persists on restart
     local theme = args.match
-    if theme and theme ~= "" then
-      local persist_file = vim.fn.stdpath('data') .. '/last_theme.txt'
+    if theme and theme ~= '' then
+      local persist_file = vim.fn.stdpath 'data' .. '/last_theme.txt'
       local f = io.open(persist_file, 'w')
       if f then
         f:write(theme)
@@ -1281,10 +1281,10 @@ vim.api.nvim_create_autocmd('ColorScheme', {
 vim.opt.fillchars:append { eob = ' ' }
 
 -- Restore previous colorscheme if it exists
-local persist_file = vim.fn.stdpath('data') .. '/last_theme.txt'
+local persist_file = vim.fn.stdpath 'data' .. '/last_theme.txt'
 local f = io.open(persist_file, 'r')
 if f then
-  local saved_theme = f:read('*a')
+  local saved_theme = f:read '*a'
   f:close()
   if saved_theme and saved_theme ~= '' then
     saved_theme = saved_theme:gsub('%s+', '')
