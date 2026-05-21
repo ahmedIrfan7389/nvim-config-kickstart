@@ -1,3 +1,35 @@
+local copilot_suggestions_enabled
+
+local function set_copilot_suggestions(enabled)
+  local suggestion = require("copilot.suggestion")
+  local config = require("copilot.config")
+
+  if enabled then
+    config.suggestion.enabled = true
+    suggestion.setup()
+  else
+    suggestion.teardown()
+    suggestion.clear_preview()
+    config.suggestion.enabled = false
+  end
+
+  for _, bufnr in ipairs(vim.api.nvim_list_bufs()) do
+    if vim.api.nvim_buf_is_loaded(bufnr) then
+      if enabled then
+        suggestion.set_keymap(bufnr)
+      else
+        suggestion.unset_keymap(bufnr)
+      end
+    end
+  end
+end
+
+local function toggle_copilot_suggestions()
+  copilot_suggestions_enabled = not copilot_suggestions_enabled
+  set_copilot_suggestions(copilot_suggestions_enabled)
+  vim.notify('Copilot inline suggestions ' .. (copilot_suggestions_enabled and 'enabled' or 'disabled'))
+end
+
 return {
   {
     "zbirenbaum/copilot.lua",
@@ -23,6 +55,9 @@ return {
           enabled = false,
         },
       })
+      if copilot_suggestions_enabled == nil then
+        copilot_suggestions_enabled = require("copilot.config").suggestion.enabled
+      end
     end,
   },
   {
@@ -157,6 +192,14 @@ return {
         end,
         desc = "Copilot Chat - Prompt Actions",
         mode = { "n", "v" },
+      },
+      {
+        "<leader>cs",
+        function()
+          toggle_copilot_suggestions()
+        end,
+        desc = "Toggle Copilot suggestions",
+        mode = { "n" },
       },
     },
   },

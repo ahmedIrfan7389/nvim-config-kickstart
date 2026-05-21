@@ -1,13 +1,22 @@
 return {
   '3rd/image.nvim',
-  build = false,              -- This prevents it from trying to build the rock manually
-  opts = {
-    processor = 'magick_cli', -- This tells it to use your Arch system's 'convert' command
-    backend = 'kitty',
-    integrations = {
-      markdown = { enabled = true },
-    },
-    max_width = 100,
-    max_height = 12,
-  },
+  build = false,
+  config = function()
+    local ok = pcall(function()
+      require('image').setup({
+        processor = 'magick_cli',
+        backend = 'kitty',
+        integrations = {
+          markdown = { enabled = true },
+        },
+        max_width = 100,
+        max_height = 12,
+      })
+    end)
+    if not ok then
+      vim.schedule(function()
+        vim.notify('image.nvim: terminal does not support image rendering (kitty backend unavailable)', vim.log.levels.INFO)
+      end)
+    end
+  end,
 }

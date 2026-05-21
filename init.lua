@@ -654,6 +654,7 @@ require('lazy').setup({
           ---@param method vim.lsp.protocol.Method
           ---@param bufnr? integer some lsp support methods only in specific files
           ---@return boolean
+          ---@diagnostic disable: param-type-mismatch
           local function client_supports_method(client, method, bufnr)
             if vim.fn.has 'nvim-0.11' == 1 then
               return client:supports_method(method, bufnr)
@@ -1299,3 +1300,13 @@ end
 
 -- The line beneath this is called `modeline`. See `:help modeline`
 -- vim: ts=2 sts=2 sw=2 et
+
+-- Autocommand to instantly reload files edited by external editors on focus
+vim.api.nvim_create_autocmd({ "FocusGained", "BufEnter", "CursorHold" }, {
+  pattern = "*",
+  callback = function()
+    if vim.o.buftype == "" then
+      vim.cmd("silent! checktime")
+    end
+  end,
+})
