@@ -5,7 +5,6 @@ return {
     local ok = pcall(function()
       require('image').setup({
         processor = 'magick_cli',
-        backend = 'kitty',
         integrations = {
           markdown = { enabled = true },
         },
@@ -14,9 +13,6 @@ return {
       })
     end)
     if not ok then
-      vim.schedule(function()
-        vim.notify('image.nvim: terminal does not support image rendering (kitty backend unavailable)', vim.log.levels.INFO)
-      end)
     end
   end,
 }

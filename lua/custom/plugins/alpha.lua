@@ -5,8 +5,15 @@ return {
     local alpha = require('alpha')
     local dashboard = require('alpha.themes.dashboard')
     
-    -- Define a custom highlight group for the red logo
-    vim.api.nvim_set_hl(0, "AlphaHeaderRed", { fg = "#E06C75" }) -- A nice, vibrant red
+    -- Override the default alpha header highlight to red
+    vim.api.nvim_set_hl(0, "AlphaHeader", { fg = "#E06C75" })
+    -- Re-apply on colorscheme changes so it always stays red
+    vim.api.nvim_create_autocmd('ColorScheme', {
+      pattern = '*',
+      callback = function()
+        vim.api.nvim_set_hl(0, "AlphaHeader", { fg = "#E06C75" })
+      end,
+    })
 
     dashboard.section.header.val = {
       "⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⢀⣷⡀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀",
@@ -29,9 +36,6 @@ return {
       "⠀⠀⠀⠀⠀⠀⠀⠀⠙⢿⣿⣿⣿⣿⠟⠀⠀⠀⠀⠀⠀⠀⠀",
       "⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⢛⡿⡛⠁⠀⠀⠀⠀⠀⠀⠀⠀⠀"
     }
-    
-    -- Apply the red highlight to the header
-    dashboard.section.header.opts.hl = "AlphaHeaderRed"
 
     dashboard.section.buttons.val = {
       dashboard.button("f", "  Find File", "<cmd>Telescope find_files<CR>"),
